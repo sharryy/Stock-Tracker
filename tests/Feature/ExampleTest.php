@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Product;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
