@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
