@@ -4,11 +4,15 @@ namespace App\Models;
 
 use App\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use phpDocumentor\Reflection\Types\Boolean;
 
 class Product extends Model
 {
     use HasFactory;
+
+    public function track()
+    {
+        $this->stock->each->track();
+    }
 
     public function inStock()
     {

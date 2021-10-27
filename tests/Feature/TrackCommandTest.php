@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Product;
 use App\Models\Retailer;
 use App\Models\Stock;
+use Http;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -27,8 +28,14 @@ class TrackCommandTest extends TestCase
         ]);
 
         $bestBuy->addStock($switch, $stock);
-        $this->assertFalse(!!$stock->refresh()->in_stock);
+        $this->assertFalse($stock->fresh()->in_stock);
+        Http::fake(function () {
+            return [
+                'available' => true,
+                'price' => 12900
+            ];
+        });
         $this->artisan('track');
-        $this->assertTrue($stock->refresh()->in_stock);
+        $this->assertTrue($stock->fresh()->in_stock);
     }
 }
