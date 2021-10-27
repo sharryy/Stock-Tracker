@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class Product extends Model
 {
