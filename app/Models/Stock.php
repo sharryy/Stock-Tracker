@@ -10,4 +10,8 @@ class Stock extends Model
     use HasFactory;
 
     protected $table = 'stock';
+
+    protected $casts = [
+        'in_stock' => 'boolean'
+    ];
 }
