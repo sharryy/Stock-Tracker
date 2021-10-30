@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Clients\BestBuy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,12 +17,12 @@ class Stock extends Model
 
     public function track()
     {
-        if ($this->retailer->name === 'Best Buy') {
-            $results = (new BestBuy())->checkAvailability($this);
-        }
+        $class = "App\\Clients\\" . \Str::studly($this->retailer->name);
+        $status = (new $class)->checkAvailability($this);
+
         $this->update([
-            'in_stock' => $results['available'],
-            'price' => $results['price']
+            'in_stock' => $status->available,
+            'price' => $status->price
         ]);
     }
 
