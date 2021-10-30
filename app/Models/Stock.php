@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Clients\ClientException;
+use App\Clients\ClientFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,12 +18,7 @@ class Stock extends Model
 
     public function track()
     {
-        $class = "App\\Clients\\" . \Str::studly($this->retailer->name);
-        if (!class_exists($class)) {
-            throw new ClientException('Class not found for ' . $this->retailer->name);
-        }
-        $status = (new $class)->checkAvailability($this);
-
+        $status = $this->retailer->client()->checkAvailability($this);
 
         $this->update([
             'in_stock' => $status->available,
