@@ -17,6 +17,12 @@ class TrackCommandTest extends TestCase
     {
         $this->seed(RetailerWithProductSeeder::class);
 
+//        dd(Product::all());
+
+        /*
+         * Only for Unit Testing
+         */
+
         $this->assertFalse(Product::first()->inStock());
         Http::fake(function () {
             return [

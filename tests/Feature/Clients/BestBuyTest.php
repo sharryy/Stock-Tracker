@@ -8,6 +8,9 @@ use Database\Seeders\RetailerWithProductSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/**
+ * @group api
+ */
 class BestBuyTest extends TestCase
 {
     use RefreshDatabase;
@@ -20,6 +23,12 @@ class BestBuyTest extends TestCase
             'sku' => '6401728',
             'url' => 'https://www.bestbuy.com/site/nintendo-switch-animal-crossing-new-horizons-edition-32gb-console-multi/6401728.p?skuId=6401728'
         ]);
-        (new BestBuy())->checkAvailability($stock);
+
+        try {
+            (new BestBuy())->checkAvailability($stock);
+        } catch (\Exception $exception) {
+            $this->fail("Failed to track API properly");
+        }
+        $this->assertTrue(true);
     }
 }
