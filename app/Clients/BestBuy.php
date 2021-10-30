@@ -9,7 +9,8 @@ class BestBuy implements Client
 {
     public function checkAvailability(Stock $stock): StockStatus
     {
-        $results = Http::get('http://foo.test')->json();
+        $url = 'https://api.bestbuy.com/v1/products/6401728.json?apiKey='. env('BEST_BUY_API_KEY');
+        $results = Http::get($url)->json();
         return new StockStatus(
             $results['available'],
             $results['price']
