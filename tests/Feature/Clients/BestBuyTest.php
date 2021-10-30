@@ -5,6 +5,7 @@ namespace Clients;
 use App\Clients\BestBuy;
 use App\Models\Stock;
 use Database\Seeders\RetailerWithProductSeeder;
+use Http;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -27,8 +28,20 @@ class BestBuyTest extends TestCase
         try {
             (new BestBuy())->checkAvailability($stock);
         } catch (\Exception $exception) {
-            $this->fail("Failed to track API properly");
+            $this->fail("Failed to track API properly" . $exception->getMessage());
         }
         $this->assertTrue(true);
+    }
+
+    /** @test */
+    function it_creates_proper_stock_status_response()
+    {
+        Http::fake(function () {
+            return ['salePrice' => 299.99, 'onlineAvailability' => true];
+        });
+
+        $stockStatus = (new BestBuy())->checkAvailability(new Stock);
+        $this->assertEquals(29999, $stockStatus->price);
+        $this->assertTrue($stockStatus->available);
     }
 }
