@@ -2,17 +2,23 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
+use App\Clients\ClientException;
+use App\Models\Retailer;
+use App\Models\Stock;
+use Database\Seeders\RetailerWithProductSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class StockTest extends TestCase
 {
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
-    public function test_example()
+    use RefreshDatabase;
+
+    /** @test */
+    function it_throws_an_exception_if_a_client_is_not_found_when_tracking()
     {
-        $this->assertTrue(true);
+        $this->seed(RetailerWithProductSeeder::class);
+        Retailer::first()->update(['name' => 'Foo Retailer']);
+        $this->expectException(ClientException::class);
+        Stock::first()->track();
     }
 }
