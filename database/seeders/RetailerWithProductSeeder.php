@@ -16,7 +16,7 @@ class RetailerWithProductSeeder extends Seeder
         $bestBuy->addStock($switch, new Stock([
             'price' => 100,
             'url' => 'https://www.foo.com',
-            'sku' => 12345,
+            'sku' => 6401728,
             'in_stock' => false
         ]));
     }
