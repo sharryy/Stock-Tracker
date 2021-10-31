@@ -20,7 +20,7 @@ class BestBuy implements Client
     public function endPoint($sku): string
     {
         $apiKey = config('services.clients.bestBuy.key');
-        return "https://api.bestbuy.com/v1/products/{$sku}.json?apiKey={$apiKey}";
+        return "https://api.bestbuy.com/v1/products/$sku.json?apiKey=$apiKey";
     }
 
     public function dollarToCents($salePrice): int
