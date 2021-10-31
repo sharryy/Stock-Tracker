@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHistoriesTable extends Migration
+class CreateProductHistoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateHistoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('histories', function (Blueprint $table) {
+        Schema::create('product_history', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained();
-            $table->foreignId('stock_id')->constrained();
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('stock_id')->constrained('stock')->cascadeOnDelete();
             $table->unsignedInteger('price');
             $table->boolean('in_stock');
             $table->timestamps();
