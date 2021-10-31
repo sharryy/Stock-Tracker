@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Clients\ClientFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,6 +23,8 @@ class Stock extends Model
             'in_stock' => $status->available,
             'price' => $status->price
         ]);
+
+        History::create(['price' => $this->price]);
     }
 
     public function retailer()
