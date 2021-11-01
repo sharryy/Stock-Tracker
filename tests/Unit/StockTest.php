@@ -29,8 +29,8 @@ class StockTest extends TestCase
     /** @test */
     function it_updates_local_stock_status_after_being_tracked()
     {
-//        $this->seed(RetailerWithProductSeeder::class);
-        ClientFactory::shouldReceive('make->checkAvailability')->andReturn(new StockStatus(true, 9900));
+        $this->seed(RetailerWithProductSeeder::class);
+        $this->mockClientRequest(true, 9900);
         $stock = tap(Stock::first())->track();
         $this->assertTrue($stock->in_stock);
         $this->assertEquals(9900, $stock->price);

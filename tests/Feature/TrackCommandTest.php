@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Clients\StockStatus;
 use App\Models\Product;
 use App\Models\User;
 use App\Notifications\ImportantStockUpdate;
@@ -14,34 +13,41 @@ use Tests\TestCase;
 
 class TrackCommandTest extends TestCase
 {
+
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(RetailerWithProductSeeder::class);
+        Notification::fake();
+    }
+
 
     /** @test */
     function it_tracks_product_stock()
     {
-        $this->seed(RetailerWithProductSeeder::class);
-
-        /*
-         * Only for Unit Testing
-         */
-
         $this->assertFalse(Product::first()->inStock());
-        ClientFactory::shouldReceive('make->checkAvailability')->andReturn(new StockStatus($available = true, $price = 29900));
+        $this->mockClientRequest(true, 29900);
 
         $this->artisan('track')->expectsOutput("All Done");
         $this->assertTrue(Product::first()->inStock());
     }
 
     /** @test */
-    function it_notifies_the_user_when_the_stock_changes_in_a_notable_way()
+    function it_notifies_the_user_when_the_stock_is_now_available()
     {
-        Notification::fake();
-        $user = User::factory()->create(['email' => 'sharryy@gmail.com']);
-        $this->seed(RetailerWithProductSeeder::class);
-        ClientFactory::shouldReceive('make->checkAvailability')->andReturn(new StockStatus($available = true, $price = 29900));
+        $this->mockClientRequest();
         $this->artisan('track');
-        Notification::assertSentTo($user, ImportantStockUpdate::class);
+        Notification::assertSentTo(User::first(), ImportantStockUpdate::class);
+    }
 
+    /** @test */
+    function it_does_not_notifies_the_user_when_the_stock_remains_unavailable()
+    {
+        $this->mockClientRequest();
+        $this->artisan('track');
+        Notification::assertNothingSent();
     }
 
 }
