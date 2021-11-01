@@ -44,7 +44,7 @@ class ImportantStockUpdate extends Notification
     {
         return (new MailMessage)
             ->subject('Important Stock Update' . $this->stock->product->name)
-            ->line('The introduction to the notification.')
+            ->line('We have some important notification of product you are tracking.')
             ->action('Notification Action', url($this->stock->url))
             ->line('Thank you for using our application!');
     }
