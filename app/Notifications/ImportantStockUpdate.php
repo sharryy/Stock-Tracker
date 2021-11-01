@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Stock;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -10,14 +11,16 @@ class ImportantStockUpdate extends Notification
 {
     use Queueable;
 
+    public $stock;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Stock $stock)
     {
-        //
+        $this->stock = $stock;
     }
 
     /**
@@ -40,9 +43,9 @@ class ImportantStockUpdate extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Important Stock Update')
+            ->subject('Important Stock Update' . $this->stock->product->name)
             ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
+            ->action('Notification Action', url($this->stock->url))
             ->line('Thank you for using our application!');
     }
 
