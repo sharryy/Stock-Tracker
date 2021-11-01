@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\History;
-use App\Models\Stock;
+use App\Models\Product;
 use Database\Seeders\RetailerWithProductSeeder;
 use Http;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -21,9 +21,13 @@ class ProductHistoryTest extends TestCase
             return ['salePrice' => 9900, 'onlineAvailability' => true];
         });
         $this->assertEquals(0, History::count());
-        $stock = tap(Stock::first())->track();
+        $product = tap(Product::first())->track();
+
         $this->assertEquals(1, History::count());
+
         $history = History::first();
+        $stock = $product->stock[0];
+
         $this->assertEquals($stock->price, $history->price);
         $this->assertEquals($stock->in_stock, $history->in_stock);
         $this->assertEquals($stock->product_id, $history->product_id);
